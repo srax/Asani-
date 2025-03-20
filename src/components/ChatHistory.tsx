@@ -17,41 +17,22 @@ export const ChatHistory: React.FC<ChatHistoryProps> = ({ messages }) => {
     return (
       <View style={styles.emptyContainer}>
         <Text style={styles.emptyText}>Asani</Text>
-        <Text style={styles.subtitleText}>Your Urdu voice assistant</Text>
       </View>
     );
   }
   
-  // Flatten the conversation into individual messages
-  const flattenedMessages = messages.flatMap((message, index) => {
-    const items = [];
-    if (message.user) {
-      items.push({
-        id: `user-${index}`,
-        text: message.user,
-        isUser: true,
-      });
-    }
-    if (message.assistant) {
-      items.push({
-        id: `assistant-${index}`,
-        text: message.assistant,
-        isUser: false,
-      });
-    }
-    return items;
-  });
-  
   return (
     <FlatList
-      data={flattenedMessages}
-      keyExtractor={(item) => item.id}
+      data={messages}
+      keyExtractor={(_, index) => index.toString()}
+      inverted
       renderItem={({ item }) => (
-        <ChatMessage text={item.text} isUser={item.isUser} />
+        <View style={styles.messageContainer}>
+          <ChatMessage text={item.user} isUser={true} />
+          <ChatMessage text={item.assistant} isUser={false} />
+        </View>
       )}
       contentContainerStyle={styles.listContent}
-      inverted={false}
-      showsVerticalScrollIndicator={false}
     />
   );
 };
@@ -59,7 +40,9 @@ export const ChatHistory: React.FC<ChatHistoryProps> = ({ messages }) => {
 const styles = StyleSheet.create({
   listContent: {
     paddingVertical: 20,
-    paddingHorizontal: 10,
+  },
+  messageContainer: {
+    marginBottom: 20,
   },
   emptyContainer: {
     flex: 1,
@@ -67,15 +50,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   emptyText: {
-    fontSize: 36,
-    fontWeight: 'bold',
+    fontSize: 24,
     color: 'white',
+    fontWeight: 'bold',
     textAlign: 'center',
-    marginBottom: 10,
-  },
-  subtitleText: {
-    fontSize: 16,
-    color: '#888',
-    textAlign: 'center',
+    paddingHorizontal: 40,
   },
 });

@@ -18,11 +18,11 @@ export const RecordButton: React.FC<RecordButtonProps> = ({
     >
       <View style={styles.iconContainer}>
         <Ionicons 
-          name="mic" 
+          name={isRecording ? "mic" : "mic-off"} 
           size={32} 
           color="white" 
         />
-        {!isRecording && (
+        {isRecording ? null : (
           <View style={styles.slash} />
         )}
       </View>

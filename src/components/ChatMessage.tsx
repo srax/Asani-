@@ -7,73 +7,49 @@ interface ChatMessageProps {
 }
 
 export const ChatMessage: React.FC<ChatMessageProps> = ({ text, isUser }) => {
-  if (!text) return null;
-  
   return (
     <View style={[styles.container, isUser ? styles.userContainer : styles.botContainer]}>
-      {!isUser && <View style={styles.avatar}>
-        <Text style={styles.avatarText}>🤖</Text>
-      </View>}
-      
       <View style={[styles.bubble, isUser ? styles.userBubble : styles.botBubble]}>
         <Text style={[styles.text, isUser ? styles.userText : styles.botText]}>
           {text}
         </Text>
       </View>
-      
-      {isUser && <View style={styles.avatar}>
-        <Text style={styles.avatarText}>👤</Text>
-      </View>}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    marginVertical: 10,
-    paddingHorizontal: 15,
+    marginVertical: 5,
+    paddingHorizontal: 10,
     width: '100%',
-    flexDirection: 'row',
-    alignItems: 'center',
   },
   userContainer: {
-    justifyContent: 'flex-end',
+    alignItems: 'flex-end',
   },
   botContainer: {
-    justifyContent: 'flex-start',
-  },
-  avatar: {
-    width: 35,
-    height: 35,
-    borderRadius: 17.5,
-    backgroundColor: '#333',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginHorizontal: 5,
-  },
-  avatarText: {
-    fontSize: 20,
+    alignItems: 'flex-start',
   },
   bubble: {
     borderRadius: 20,
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    maxWidth: '75%',
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    maxWidth: '80%',
   },
   userBubble: {
-    backgroundColor: '#8a2be2', // Purple for user messages
+    backgroundColor: '#DCF8C6',
   },
   botBubble: {
-    backgroundColor: '#444', // Dark gray for bot messages
+    backgroundColor: '#F1F0F0',
   },
   text: {
     fontSize: 16,
     lineHeight: 24,
   },
   userText: {
-    color: 'white',
+    color: '#000',
   },
   botText: {
-    color: 'white',
+    color: '#000',
   },
 });
