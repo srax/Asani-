@@ -7,9 +7,14 @@ interface ChatMessageProps {
 }
 
 export const ChatMessage: React.FC<ChatMessageProps> = ({ text, isUser }) => {
+  if (!text) return null;
+  
   return (
     <View style={[styles.container, isUser ? styles.userContainer : styles.botContainer]}>
-      <View style={[styles.bubble, isUser ? styles.userBubble : styles.botBubble]}>
+      <View style={[
+        styles.bubble, 
+        isUser ? styles.userBubble : styles.botBubble,
+      ]}>
         <Text style={[styles.text, isUser ? styles.userText : styles.botText]}>
           {text}
         </Text>
@@ -20,36 +25,44 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ text, isUser }) => {
 
 const styles = StyleSheet.create({
   container: {
-    marginVertical: 5,
-    paddingHorizontal: 10,
+    marginVertical: 6,
+    paddingHorizontal: 12,
     width: '100%',
+    flexDirection: 'row',
   },
   userContainer: {
-    alignItems: 'flex-end',
+    justifyContent: 'flex-end',
   },
   botContainer: {
-    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
   },
   bubble: {
-    borderRadius: 20,
+    borderRadius: 18,
     paddingVertical: 10,
-    paddingHorizontal: 15,
+    paddingHorizontal: 14,
     maxWidth: '80%',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.08,
+    shadowRadius: 2,
+    elevation: 1,
   },
   userBubble: {
-    backgroundColor: '#DCF8C6',
+    backgroundColor: '#007AFF', // iMessage blue
+    borderTopRightRadius: 4,
   },
   botBubble: {
-    backgroundColor: '#F1F0F0',
+    backgroundColor: '#E9E9EB', // Light gray for AI messages (iMessage style)
+    borderTopLeftRadius: 4,
   },
   text: {
     fontSize: 16,
-    lineHeight: 24,
+    lineHeight: 22,
   },
   userText: {
-    color: '#000',
+    color: 'white',
   },
   botText: {
-    color: '#000',
+    color: '#000000',
   },
 });

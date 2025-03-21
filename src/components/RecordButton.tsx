@@ -16,15 +16,12 @@ export const RecordButton: React.FC<RecordButtonProps> = ({
       style={[styles.button, isRecording ? styles.recordingButton : null]}
       onPress={onToggleRecording}
     >
-      <View style={styles.iconContainer}>
+      <View style={[styles.innerCircle, isRecording && styles.recordingInnerCircle]}>
         <Ionicons 
-          name={isRecording ? "mic" : "mic-off"} 
-          size={32} 
-          color="white" 
+          name={isRecording ? "square" : "mic"} 
+          size={isRecording ? 20 : 28} 
+          color={isRecording ? "white" : "#007AFF"} 
         />
-        {isRecording ? null : (
-          <View style={styles.slash} />
-        )}
       </View>
     </TouchableOpacity>
   );
@@ -32,26 +29,34 @@ export const RecordButton: React.FC<RecordButtonProps> = ({
 
 const styles = StyleSheet.create({
   button: {
-    width: 70,
-    height: 70,
-    borderRadius: 35,
-    backgroundColor: '#333333', // Dark gray background
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    backgroundColor: '#e9ecef',
     justifyContent: 'center',
     alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    elevation: 3,
   },
   recordingButton: {
-    backgroundColor: '#ea4335', // Red when recording
+    backgroundColor: '#007AFF',
   },
-  iconContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    position: 'relative',
-  },
-  slash: {
-    position: 'absolute',
-    width: 2,
-    height: 38,
+  innerCircle: {
+    width: 52,
+    height: 52,
+    borderRadius: 26,
     backgroundColor: 'white',
-    transform: [{ rotate: '45deg' }],
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 1,
+  },
+  recordingInnerCircle: {
+    backgroundColor: 'rgba(255, 0, 0, 0.9)',
   },
 });

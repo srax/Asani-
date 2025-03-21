@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "urdu-voice-chatbot",
+    "name": "Asani",
     "slug": "urdu-voice-chatbot",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -13,16 +13,39 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.sraxx.urdugpt"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.sraxx.urdugpt",
+      "permissions": ["RECORD_AUDIO"]
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "f1b1b0ce-c634-4785-ac2c-aadc5e8d5366"
+      }
+    },
+    "owner": "sraxx",
+    "plugins": [
+      [
+        "expo-av",
+        {
+          "microphonePermission": "Allow Asani to access your microphone."
+        }
+      ]
+    ],
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/f1b1b0ce-c634-4785-ac2c-aadc5e8d5366"
     }
   }
 }

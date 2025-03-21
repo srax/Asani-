@@ -17,6 +17,8 @@
     "expo-file-system": "~18.0.11",
     "expo-speech": "~13.0.1",
     "expo-status-bar": "~2.0.1",
+    "expo-updates": "^0.27.4",
+    "lottie-react-native": "^7.2.2",
     "openai": "^4.86.1",
     "react": "18.3.1",
     "react-native": "0.76.7",
