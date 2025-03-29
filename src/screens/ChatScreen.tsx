@@ -10,7 +10,7 @@ import { ChatHistory } from '../components/ChatHistory';
 const ChatScreen: React.FC = () => {
   const { messages, addMessage, clearMessages } = useConversation();
   const { isRecording, start, stop } = useAudioRecording();
-  const { isProcessing, currentStep, error, processAudio } = useChatCompletion();
+  const { isProcessing, currentStep, error, processAudio, useEnglishProcessing } = useChatCompletion();
   
   // Transform messages to match ChatHistory's expected format
   const transformedMessages = useMemo(() => {
@@ -28,8 +28,8 @@ const ChatScreen: React.FC = () => {
         // Process the audio with OpenAI
         const result = await processAudio(audioUri);
         if (result) {
-          // Add both user message and assistant response to the conversation
-          addMessage(result.userMessage, true);
+          // Add the original Urdu user message (not the English translation)
+          addMessage(result.originalUrduText || result.userMessage, true);
           addMessage(result.assistantMessage, false);
         }
       }
@@ -50,6 +50,7 @@ const ChatScreen: React.FC = () => {
     if (isProcessing) {
       switch (currentStep) {
         case 'transcribing': return 'Transcribing your voice...';
+        case 'translating': return 'Processing your voice...';
         case 'thinking': return 'Generating response...';
         case 'speaking': return 'Speaking response...';
         default: return 'Processing...';
@@ -165,4 +166,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ChatScreen;
+export default ChatScreen; 

@@ -1,4 +1,4 @@
-import { Audio } from 'expo-av';
+import { Audio, InterruptionModeAndroid, InterruptionModeIOS } from 'expo-av';
 
 // Initialize audio recording
 export const startRecording = async (): Promise<Audio.Recording | null> => {
@@ -10,20 +10,54 @@ export const startRecording = async (): Promise<Audio.Recording | null> => {
       return null;
     }
     
-    // Prepare recording options
+    // Configure audio mode for recording with proper iOS settings
     await Audio.setAudioModeAsync({
       allowsRecordingIOS: true,
       playsInSilentModeIOS: true,
+      staysActiveInBackground: true,
       shouldDuckAndroid: true,
       playThroughEarpieceAndroid: false,
+      interruptionModeIOS: InterruptionModeIOS.DoNotMix,
+      interruptionModeAndroid: InterruptionModeAndroid.DoNotMix,
     });
     
-    // Start recording
-    const { recording } = await Audio.Recording.createAsync(
-      Audio.RecordingOptionsPresets.HIGH_QUALITY
-    );
-    
-    return recording;
+    // Create and prepare the recording
+    const recording = new Audio.Recording();
+    try {
+      // Use more specific recording options for iOS
+      await recording.prepareToRecordAsync({
+        android: {
+          extension: '.m4a',
+          outputFormat: Audio.AndroidOutputFormat.MPEG_4,
+          audioEncoder: Audio.AndroidAudioEncoder.AAC,
+          sampleRate: 44100,
+          numberOfChannels: 1,
+          bitRate: 128000,
+        },
+        ios: {
+          extension: '.m4a',
+          outputFormat: Audio.IOSOutputFormat.MPEG4AAC,
+          audioQuality: Audio.IOSAudioQuality.MAX,
+          sampleRate: 44100,
+          numberOfChannels: 1,
+          bitRate: 128000,
+          linearPCMBitDepth: 16,
+          linearPCMIsBigEndian: false,
+          linearPCMIsFloat: false,
+        },
+        web: {
+          mimeType: 'audio/webm',
+          bitsPerSecond: 128000,
+        },
+      });
+      
+      // Start recording
+      await recording.startAsync();
+      return recording;
+    } catch (error) {
+      console.error('Error preparing recording:', error);
+      return null;
+    }
   } catch (error) {
     console.error('Failed to start recording:', error);
     return null;
@@ -36,6 +70,18 @@ export const stopRecording = async (
 ): Promise<string | null> => {
   try {
     await recording.stopAndUnloadAsync();
+    
+    // Reset audio mode after recording
+    await Audio.setAudioModeAsync({
+      allowsRecordingIOS: false,
+      playsInSilentModeIOS: true,
+      staysActiveInBackground: true,
+      shouldDuckAndroid: true,
+      playThroughEarpieceAndroid: false,
+      interruptionModeIOS: InterruptionModeIOS.DoNotMix,
+      interruptionModeAndroid: InterruptionModeAndroid.DoNotMix,
+    });
+    
     const uri = recording.getURI();
     return uri;
   } catch (error) {
@@ -47,7 +93,29 @@ export const stopRecording = async (
 // Play audio from a URI
 export const playAudio = async (uri: string): Promise<void> => {
   try {
-    const { sound } = await Audio.Sound.createAsync({ uri });
+    // Configure audio mode for playback
+    await Audio.setAudioModeAsync({
+      allowsRecordingIOS: false,
+      playsInSilentModeIOS: true,
+      staysActiveInBackground: true,
+      shouldDuckAndroid: true,
+      playThroughEarpieceAndroid: false,
+      interruptionModeIOS: InterruptionModeIOS.DoNotMix,
+      interruptionModeAndroid: InterruptionModeAndroid.DoNotMix,
+    });
+    
+    const { sound } = await Audio.Sound.createAsync(
+      { uri },
+      { shouldPlay: true }
+    );
+    
+    // Clean up the sound object when playback finishes
+    sound.setOnPlaybackStatusUpdate(async (status) => {
+      if (status.isLoaded && !status.isPlaying && status.didJustFinish) {
+        await sound.unloadAsync();
+      }
+    });
+    
     await sound.playAsync();
   } catch (error) {
     console.error('Failed to play audio:', error);

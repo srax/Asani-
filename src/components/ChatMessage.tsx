@@ -25,8 +25,8 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ text, isUser }) => {
 
 const styles = StyleSheet.create({
   container: {
-    marginVertical: 6,
-    paddingHorizontal: 12,
+    marginVertical: 8,
+    paddingHorizontal: 14,
     width: '100%',
     flexDirection: 'row',
   },
@@ -37,32 +37,33 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   bubble: {
-    borderRadius: 18,
-    paddingVertical: 10,
-    paddingHorizontal: 14,
-    maxWidth: '80%',
+    borderRadius: 20,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    maxWidth: '85%',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.08,
-    shadowRadius: 2,
-    elevation: 1,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
   },
   userBubble: {
-    backgroundColor: '#007AFF', // iMessage blue
-    borderTopRightRadius: 4,
+    backgroundColor: '#0084FF', // Slightly more vibrant blue
+    borderTopRightRadius: 6,
   },
   botBubble: {
-    backgroundColor: '#E9E9EB', // Light gray for AI messages (iMessage style)
-    borderTopLeftRadius: 4,
+    backgroundColor: '#F0F0F2', // Lighter gray for better contrast
+    borderTopLeftRadius: 6,
   },
   text: {
     fontSize: 16,
-    lineHeight: 22,
+    lineHeight: 24,
+    fontWeight: '400',
   },
   userText: {
     color: 'white',
   },
   botText: {
-    color: '#000000',
+    color: '#111111',
   },
 });
